@@ -90,7 +90,7 @@ app.get('/auth/google/callback', (req, res) => {
 
 // create oauth client to so we can use the getToken() method
 function getOAuthClient() {
-	return new OAuth2(keys.googleClientID, keys.googleClientSecret, 'https://infinite-depths-50373.herokuapp.com/auth/google/callback')
+	return new OAuth2(keys.googleClientID, keys.googleClientSecret, 'https://calendarly.herokuapp.com/auth/google/callback')
 }
 // callback for heroku: https://infinite-depths-50373.herokuapp.com/auth/google/callback
 // callback for localhost: http://localhost:5000/auth/google/callback
