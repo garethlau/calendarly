@@ -167,13 +167,6 @@ function formatter(data) {
 		events.push(json);
 	}
 
-/*	for (let i = 0; i < events.length; i++) {
-		console.log(events[i]);
-		console.log('\n');
-	}*/
-
 	return(events);
 
 }
-
-//console.log(formatter(testData));

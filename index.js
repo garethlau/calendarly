@@ -14,25 +14,11 @@ const FileStore = require('session-file-store')(session);
 // google api keys
 const keys = require('./config/keys');
 
-// import scraper and creator stuff
+// import event creator function
 const creator = require('./scraper/creator');
-const scraper = require('./scraper/scraper.js');
-const formatter = require('./scraper/formatter.js');
 
 // initialize express app
 const app = express();
-
-// google oauth strategy
-passport.use(
-	new GoogleStrategy({
-		clientID: keys.googleClientID,
-		clientSecret: keys.googleClientSecret,
-		callbackURL: '/auth/google/callback',
-		proxy: true
-	}, () => {
-		console.log();
-	})
-);
 
 // configure app and add middleware
 app.use(session({
@@ -50,7 +36,19 @@ app.use(session({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// form
+// google oauth strategy
+passport.use(
+	new GoogleStrategy({
+		clientID: keys.googleClientID,
+		clientSecret: keys.googleClientSecret,
+		callbackURL: '/auth/google/callback',
+		proxy: true
+	}, () => {
+		console.log();
+	})
+);
+
+// form route
 app.get('/form', (req, res) => {
 	res.sendFile('./views/form.html', {root: __dirname });
 });
@@ -92,7 +90,7 @@ app.get('/auth/google/callback', (req, res) => {
 function getOAuthClient() {
 	return new OAuth2(keys.googleClientID, keys.googleClientSecret, 'https://calendarly.herokuapp.com/auth/google/callback')
 }
-// callback for heroku: https://infinite-depths-50373.herokuapp.com/auth/google/callback
+// callback for heroku: calendarly.herokuapp.com/auth/google/callback
 // callback for localhost: http://localhost:5000/auth/google/callback
 
 // scrape student calendar and interaction with google calendar is in this function
@@ -102,29 +100,7 @@ async function main(urlCode, req) {
 
 	const {tokens} = await oauth2client.getToken(code);
 	oauth2client.setCredentials(tokens);
-	/*
-	await oauth2client.getToken(code, (err, tokens) => {
 
-		console.log(tokens);
-        // now tokens contains an access_token and an optional refresh_token
-		// save the tokens (???) no need to save the token if we use it right after in the following
-		// functions but it might be better to save it later once we move functions to separate files
-
-		// access token is needed to make future requests to calendar API
-		const token = tokens.access_token;
-		req.accessToken = tokens.access_token;
-		console.log('the access token is: ' + req.accessToken);
-		if (!err) {
-			oauth2client.setCredentials(tokens);
-			console.log('login success');
-			return(token);
-		}
-		else {
-			console.log('login failed');
-			return(null);
-		}
-
-	});*/
 	console.log('finished getting access token: ' + tokens.access_token);
 	const calEntries = await creator.creator(req.session.username, req.session.password);
 	console.log('cal entries are: ');
@@ -153,40 +129,6 @@ async function main(urlCode, req) {
 		});
 	}
 	return ('finished');
-}
-
-function addEvents(urlCode, req) {
-	let oauth2client = getOAuthClient();
-	let code = urlCode;
-	let accessToken;
-
-	oauth2client.getToken(code, (err, tokens) => {
-		// access token is needed to make future requests to calendar API
-		accessToken = tokens.access_token;
-		req.session.accessToken = tokens.access_token;
-		oauth2client.setCredentials(tokens);
-
-		scraper.scraper(req.session.username, req.session.password).then((data) => {
-			const events = formatter.formatter(data);
-
-			const calId = req.session.calID;
-			const baseUrl = 'https://www.googleapis.com/calendar/v3';
-			const method1 = '/calendars/';
-			const method2 = '/events';
-			const url = baseUrl + method1 + calId + method2 + '?access_token=' + req.session.accessToken;
-
-			for (let i = 0; i < events.length; i++) {
-				console.log('cal entry: ' + i);
-				fetch(url, {
-					method: 'POST',
-					body: events[i],
-					headers: {'Content-Type': 'application/json'},
-				})
-			}
-		});
-		console.log('scraper and formatter finished');
-
-	});
 }
 
 // listen to traffic on PORT

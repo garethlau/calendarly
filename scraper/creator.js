@@ -8,10 +8,3 @@ async function creator(username, password) {
 	//console.log(returnedData);
 	return formatter.formatter(returnedData);
 }
-
-
-
-/*
-scraper.scraper('glau29', 'q#H33QwE').then( (data) => {
-	console.log(formatter.formatter(data));
-});*/

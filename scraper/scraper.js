@@ -63,10 +63,3 @@ async function scraper(username, password) {
 		return(e);
 	}
 }
-
-/*
-scraper('glau9', 'q#H33QwE').then( (data) => {
-	console.log(data)
-}).catch( (e) => {
-	console.log(e)
-});*/
