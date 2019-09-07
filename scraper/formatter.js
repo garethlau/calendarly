@@ -138,7 +138,7 @@ function formatter(data) {
 		let classEndDateTime = classDate + 'T' + classEndTime + timeZoneOffset;
 
 		// recurrence
-		let recurrence = ["RRULE:FREQ=WEEKLY;UNTIL=20190408T000000Z"];
+		let recurrence = ["RRULE:FREQ=WEEKLY;UNTIL=2011213T000000Z"];
 
 		// find location
 		let classLocation = data[i].slice(locationIndex + 9);
