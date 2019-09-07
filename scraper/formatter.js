@@ -113,23 +113,23 @@ function formatter(data) {
 		let locationIndex = data[i].indexOf('Location');
 		let classDay = data[i].slice(dayIndex + 5, locationIndex);
 		let classDate;
-		const base = '2019-01-';
+		const base = '2019-09-';
 		// determine the date
 		switch (classDay) {
 			case 'Mon':
-				classDate = base + '07';
-				break;
-			case 'Tues':
-				classDate = base + '08';
-				break;
-			case 'Wed':
 				classDate = base + '09';
 				break;
-			case 'Thurs':
+			case 'Tues':
 				classDate = base + '10';
 				break;
-			case 'Fri':
+			case 'Wed':
 				classDate = base + '11';
+				break;
+			case 'Thurs':
+				classDate = base + '12';
+				break;
+			case 'Fri':
+				classDate = base + '13';
 				break;
 		}
 		let timeZone = 'Canada/Eastern';
