@@ -133,7 +133,7 @@ function formatter(data) {
 				break;
 		}
 		let timeZone = 'Canada/Eastern';
-		let timeZoneOffset = '-05:00';
+		let timeZoneOffset = '-04:00';
 		let classStartDateTime = classDate + 'T' + classStartTime + timeZoneOffset;
 		let classEndDateTime = classDate + 'T' + classEndTime + timeZoneOffset;
 

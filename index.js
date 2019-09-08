@@ -90,7 +90,7 @@ app.get('/auth/google/callback', (req, res) => {
 function getOAuthClient() {
 	return new OAuth2(keys.googleClientID, keys.googleClientSecret, 'https://calendarly.herokuapp.com/auth/google/callback')
 }
-// callback for heroku: calendarly.herokuapp.com/auth/google/callback
+// callback for heroku: https://calendarly.herokuapp.com/auth/google/callback
 // callback for localhost: http://localhost:5000/auth/google/callback
 
 // scrape student calendar and interaction with google calendar is in this function
